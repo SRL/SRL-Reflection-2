@@ -680,6 +680,42 @@ begin
 end;
 
 (*
+R_WithdrawMode
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_WithdrawMode(Noted: Boolean): Boolean;
+
+Sets the withdraw mode to either noted or item.
+
+.. note::
+
+  by mormonman
+
+*)
+function R_WithdrawMode(Noted: Boolean): Boolean;
+var
+  T: Integer;
+  CI: TInterfaceChild;
+begin
+  if not R_BankScreen then Exit;
+
+  T := (GetSystemTime + 3000)
+  while (GetSystemTime < T) do
+  begin
+    CI := R_GetInterfaceChild(INTERFACE_BANK, INTERFACE_BANK_BTN_NOTE);
+    if (Noted xor (CI.TextureID <> TEXTURE_WITHDRAWMODE_NOTED)) then
+    begin
+      Result := True;
+      Exit;
+    end;
+    R_ClickInterface(CI, mouse_Left);
+    Wait(RandomRange(500, 800));
+  end;
+end;
+
+(*
 R_SlotOnScreen
 ~~~~~~~~~~~~~~~~~~
 
