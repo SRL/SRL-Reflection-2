@@ -1184,12 +1184,12 @@ begin
   SortTPAFrom(Tiles, R_GetMyPos);
   Tile := Tiles[0];
 
-  Writeln('Starting');
+  //Writeln('Starting');
 
   //Get to bank booth.
   if(R_DistanceFromTile(Tile) > 3) and (not R_TileOnMS(Tile, 10))then
   begin
-    Writeln('RAWR');
+    //Writeln('RAWR');
     if not(R_TileOnMM(Tile)) then
     begin
       R_Debug('Could not find Bank Booth.', 'R_OpenBankBooth');
