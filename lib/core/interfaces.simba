@@ -386,7 +386,7 @@ Returns if an interface defined by OBJ is hidden.
 
 .. note::
 
-  by Drags111
+  by mormonman
 
 *)
 function R_GetInterfaceHidden(Obj: Integer): Boolean;
@@ -643,6 +643,57 @@ Returns the Interface -> Child's text.
 function R_GetInterfaceText(ParentI, ChildI: Integer): String;
 begin
   Result := R_GetInterfaceTextEx(ParentI, ChildI, -1);
+end;
+
+(*
+R_IsInterfaceHiddenEx
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_IsInterfaceHiddenEx(ParentI, ChildI, CompI: Integer): String;
+
+Returns the Interface -> Child -> Component's value for IsHidden.
+Set CompI to -1 to only use ChildI.
+
+.. note::
+
+  by mormonman
+
+*)
+function R_IsInterfaceHiddenEx(ParentI, ChildI, CompI: Integer): String;
+var
+  Child: Integer;
+begin
+  if (CompI < 0) then
+    Child := R_GetInterfaceChildRef(ParentI, ChildI)
+      else Child := R_GetInterfaceComponentRef(ParentI, ChildI, CompI);
+  if (Child > 0) then
+  try
+    Result := R_GetInterfaceHidden(Child);
+  finally
+    SmartFreeObject(Child);
+  end;
+end;
+
+(*
+R_IsInterfaceHidden
+~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_IsInterfaceHidden(ParentI, ChildI: Integer): String;
+
+Returns the Interface -> Child's value for IsHidden.
+
+.. note::
+
+  by mormonman
+
+*)
+function R_IsInterfaceHidden(ParentI, ChildI: Integer): String;
+begin
+  Result := R_IsInterfaceHiddenEx(ParentI, ChildI, -1);
 end;
 
 (*
