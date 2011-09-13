@@ -1,4 +1,3 @@
-//{$i srl\srl\misc\paintsmart.scar}
 (*
 Interfaces
 ==========
@@ -376,6 +375,39 @@ begin
 end;
 
 (*
+R_GetInterfaceHidden
+~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetInterfaceHidden(Obj: Integer): Boolean;
+
+Returns if an interface defined by OBJ is hidden.
+
+.. note::
+
+  by Drags111
+
+*)
+function R_GetInterfaceHidden(Obj: Integer): Boolean;
+var
+  ParentID, ParentObj: Integer;
+begin
+  ParentID := R_GetInterfaceParentID(Obj);
+
+  if(ParentID > 0)then
+  begin
+    try
+      ParentObj := SmartGetFieldArray2DObject(0, hook_static_Interfaces, ParentID shr 16, ParentID and $FFFF);
+      Result := SmartGetFieldBoolean(ParentObj, hook_interface_IsHidden);
+    finally
+      SmartFreeObject(ParentObj);
+    end;
+  end else
+    Result := SmartGetFieldBoolean(Obj, hook_interface_IsHidden);
+end;
+
+(*
 R_GetInterfaceChild
 ~~~~~~~~~~~~~~~~~~~
 
@@ -394,12 +426,14 @@ function R_GetInterfaceChild(ParentI, ChildI: Integer): TInterfaceChild;
 var
   Child, TextObj, NameObj: Integer;
   P: TPoint;
+  H: Boolean;
 begin
   if not(R_ValidInterface(ParentI))then
     Exit;
   try
     Child := R_GetInterfaceChildRef(ParentI, ChildI);
     P := R_GetAbsoluteInterfacePos(Child);
+    H := R_GetInterfaceHidden(Child);
     SetLength(Result.Indices, 2);
     with Result do
     begin
@@ -433,7 +467,7 @@ begin
         SmartFreeObject(NameObj);
       end;
 
-      IsHidden := SmartGetFieldBoolean(Child, hook_interface_IsHidden);
+      IsHidden := H;
       VScrollSize := SmartGetFieldInt(Child, hook_interface_VerticalScrollBarSize);
       VScrollPosition := SmartGetFieldInt(Child, hook_interface_VerticalScrollBarPosition);
       VThumbSize := SmartGetFieldInt(Child, hook_interface_VerticalScrollBarThumbSize);
@@ -470,12 +504,14 @@ function R_GetInterfaceComponent(ParentI, ChildI, ComponentI: Integer): TInterfa
 var
   Component, TextObj: Integer;
   P: TPoint;
+  H: Boolean;
 begin
   if not(R_ValidInterface(ParentI))then
     Exit;
   try
     Component := R_GetInterfaceComponentRef(ParentI, ChildI, ComponentI);
     P := R_GetAbsoluteInterfacePos(Component);
+    H := R_GetInterfaceHidden(Component);
     SetLength(Result.Indices, 3);
     with Result do
     begin
@@ -509,7 +545,7 @@ begin
         SmartFreeObject(TextObj);
       end;
 
-      IsHidden := SmartGetFieldBoolean(Component, hook_interface_IsHidden);
+      IsHidden := H;
       VScrollSize := SmartGetFieldInt(Component, hook_interface_VerticalScrollBarSize);
       VScrollPosition := SmartGetFieldInt(Component, hook_interface_VerticalScrollBarPosition);
       VThumbSize := SmartGetFieldInt(Component, hook_interface_VerticalScrollBarThumbSize);
@@ -579,10 +615,14 @@ begin
   if (CompI < 0) then
     Child := R_GetInterfaceChildRef(ParentI, ChildI)
       else Child := R_GetInterfaceComponentRef(ParentI, ChildI, CompI);
-  Text := SmartGetFieldObject(Child, hook_interface_Text);
-  Result := R_GetJavaString(Text, 512);
-  SmartFreeObject(Text);
-  SmartFreeObject(Child);
+  if (Child > 0) then
+  try
+    Text := SmartGetFieldObject(Child, hook_interface_Text);
+    Result := R_GetJavaString(Text, 512);
+  finally
+    SmartFreeObject(Text);
+    SmartFreeObject(Child);
+  end;
 end;
 
 (*
