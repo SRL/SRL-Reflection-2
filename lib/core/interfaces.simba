@@ -651,7 +651,7 @@ R_IsInterfaceHiddenEx
 
 .. code-block:: pascal
 
-    function R_IsInterfaceHiddenEx(ParentI, ChildI, CompI: Integer): String;
+    function R_IsInterfaceHiddenEx(ParentI, ChildI, CompI: Integer): Boolean;
 
 Returns the Interface -> Child -> Component's value for IsHidden.
 Set CompI to -1 to only use ChildI.
@@ -661,7 +661,7 @@ Set CompI to -1 to only use ChildI.
   by mormonman
 
 *)
-function R_IsInterfaceHiddenEx(ParentI, ChildI, CompI: Integer): String;
+function R_IsInterfaceHiddenEx(ParentI, ChildI, CompI: Integer): Boolean;
 var
   Child: Integer;
 begin
@@ -682,7 +682,7 @@ R_IsInterfaceHidden
 
 .. code-block:: pascal
 
-    function R_IsInterfaceHidden(ParentI, ChildI: Integer): String;
+    function R_IsInterfaceHidden(ParentI, ChildI: Integer): Boolean;
 
 Returns the Interface -> Child's value for IsHidden.
 
@@ -691,7 +691,7 @@ Returns the Interface -> Child's value for IsHidden.
   by mormonman
 
 *)
-function R_IsInterfaceHidden(ParentI, ChildI: Integer): String;
+function R_IsInterfaceHidden(ParentI, ChildI: Integer): Boolean;
 begin
   Result := R_IsInterfaceHiddenEx(ParentI, ChildI, -1);
 end;

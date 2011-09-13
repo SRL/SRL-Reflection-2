@@ -171,12 +171,12 @@ begin
 end;
 
 (*
-WaitOptionExistsMulti
+R_WaitOptionExistsMulti
 ~~~~~~~~~~~~
 
 .. code-block:: pascal
 
-    function WaitOptionExistsMulti(S: TStringArray; Time: Integer): Boolean;
+    function R_WaitOptionExistsMulti(S: TStringArray; Time: Integer): Boolean;
 
 Waits for the options
 
@@ -185,7 +185,7 @@ Waits for the options
   by mormonman
 
 *)
-function WaitOptionExistsMulti(S: TStringArray; Time: Integer): Boolean;
+function R_WaitOptionExistsMulti(S: TStringArray; Time: Integer): Boolean;
 var
   T: Integer;
 begin
@@ -203,12 +203,12 @@ begin
 end;
 
 (*
-WaitOptionExists
+R_WaitOptionExists
 ~~~~~~~~~~~~
 
 .. code-block:: pascal
 
-    function WaitOptionExists(S: String; Time: Integer): Boolean;
+    function R_WaitOptionExists(S: String; Time: Integer): Boolean;
 
 Waits for the option
 
@@ -217,9 +217,9 @@ Waits for the option
   by mormonman
 
 *)
-function WaitOptionExists(S: String; Time: Integer): Boolean;
+function R_WaitOptionExists(S: String; Time: Integer): Boolean;
 begin
-  Result := WaitOptionExistsMulti([S], Time);
+  Result := R_WaitOptionExistsMulti([S], Time);
 end;
 
 (*
