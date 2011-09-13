@@ -71,26 +71,28 @@ begin
   ChildInfo.Visible := True;
   ChildInfo.CAPTION := '';
 
-  SetLength(TP, 17);
+  SetLength(TP, 19);
   with Child do
   begin
     TP[0] := 'Name: ' + ToStr(Name);
-    TP[1] := 'Text: ' + ToStr(Text);
-    TP[2] := 'Actions: ' + ToStr(Actions);
-    TP[3] := 'ID: ' + ToStr(ID);
-    TP[4] := 'ParentID: ' + ToStr(ParentID);
-    TP[5] := 'TextureID: ' + ToStr(TextureID);
-    TP[6] := 'ModelID: ' + ToStr(ModelID);
-    TP[7] := 'ModelZoom: ' + ToStr(ModelZoom);
-    TP[8] := 'RelativeX: ' + ToStr(RelativeX);
-    TP[9] := 'RelativeY: ' + ToStr(RelativeY);
-    TP[10] := 'X: ' + ToStr(X);
-    TP[11] := 'Y: ' + ToStr(Y);
-    TP[12] := 'Width: ' + ToStr(Width);
-    TP[13] := 'Height: ' + ToStr(Height);
-    TP[14] := 'Bounds: ' + ToStr(Bounds);
-    TP[15] := 'Stack: ' + ToStr(Stack);
-    TP[16] := 'IsHidden: ' + ToStr(IsHidden);
+    TP[1] := 'IsHidden: ' + ToStr(IsHidden);
+    TP[2] := 'Text: ' + ToStr(Text);
+    TP[3] := 'TextColor: ' + ToStr(TextColor);
+    TP[4] := 'Actions: ' + ToStr(Actions);
+    TP[5] := 'ID: ' + ToStr(ID);
+    TP[6] := 'ParentID: ' + ToStr(ParentID);
+    TP[7] := 'TextureID: ' + ToStr(TextureID);
+    TP[8] := 'ComponentID: ' + ToStr(ComponentID);
+    TP[9] := 'Stack: ' + ToStr(Stack);
+    TP[10] := 'ModelID: ' + ToStr(ModelID);
+    TP[11] := 'ModelZoom: ' + ToStr(ModelZoom);
+    TP[12] := 'RelativeX: ' + ToStr(RelativeX);
+    TP[13] := 'RelativeY: ' + ToStr(RelativeY);
+    TP[14] := 'X: ' + ToStr(X);
+    TP[15] := 'Y: ' + ToStr(Y);
+    TP[16] := 'Width: ' + ToStr(Width);
+    TP[17] := 'Height: ' + ToStr(Height);
+    TP[18] := 'Bounds: ' + ToStr(Bounds);
   end;
 
   for I := 0 to High(TP) do
@@ -244,7 +246,7 @@ begin
 
   InfoHousing := TScrollBox.Create(ifaceExplorer);
   InfoHousing.Parent := ifaceExplorer;
-  InfoHousing.SetBounds(225, 102, 355, 335);
+  InfoHousing.SetBounds(225, 60, 355, 375);
 
   ChildInfo := TLabel.Create(InfoHousing);
   ChildInfo.Parent := InfoHousing;
