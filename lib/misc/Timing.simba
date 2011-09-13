@@ -171,6 +171,58 @@ begin
 end;
 
 (*
+WaitOptionExistsMulti
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function WaitOptionExistsMulti(S: TStringArray; Time: Integer): Boolean;
+
+Waits for the options
+
+.. note::
+
+  by mormonman
+
+*)
+function WaitOptionExistsMulti(S: TStringArray; Time: Integer): Boolean;
+var
+  T: Integer;
+begin
+  Result := False;
+  T := GetSystemTime + Time;
+  while (GetSystemTime < T) do
+  begin
+    if R_OptionExistsMulti(S) then
+    begin
+      Result := True;
+      Exit;
+    end;
+    Wait(20 + Random(10));
+  end;
+end;
+
+(*
+WaitOptionExists
+~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function WaitOptionExists(S: String; Time: Integer): Boolean;
+
+Waits for the option
+
+.. note::
+
+  by mormonman
+
+*)
+function WaitOptionExists(S: String; Time: Integer): Boolean;
+begin
+  Result := WaitOptionExistsMulti([S], Time);
+end;
+
+(*
 R_WaitNPCChatchange
 ~~~~~~~~~~~~~~~~~~~
 
