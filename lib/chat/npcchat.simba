@@ -284,7 +284,7 @@ R_GetChatChoices
 
     function R_GetChatChoices(TopText: String): array of TInterfaceChild;
 
-Returns the interfaces that .
+Returns the interfaces that contain text underneath the TopText interface.
 
 .. note::
 
@@ -296,7 +296,6 @@ var
   Cont: TInterfaceChild;
   Children: TIntegerArray;
   Index, I, C: Integer;
-  IsName: Boolean;
   Text: String;
 begin
   Cont := R_GetChatOption(TopText);
