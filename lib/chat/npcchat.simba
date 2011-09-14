@@ -265,7 +265,7 @@ begin
 		for K := 0 to High(ValidChildren) do
     begin
 			ChildText := R_GetInterfaceText(ValidInterfaces[I], K);
-			if (ChildText = '')then
+			if ((ChildText = '') or R_IsInterfaceHidden(ValidInterfaces[I], K))then
 				Continue;
 			if (Pos(TopText, ChildText) > 0)then
       begin
