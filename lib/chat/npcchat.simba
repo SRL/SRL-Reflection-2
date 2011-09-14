@@ -231,3 +231,129 @@ begin
   Cont := R_GetClickContinueInterface;
   Result := Cont.ID > 0;
 end;
+
+(*
+R_GetChatOption
+~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetChatOption(TopText: String): TInterfaceChild;
+
+Returns the option interface found with TopText.
+
+.. note::
+
+  by mormonman
+
+*)
+function R_GetChatOption(TopText: String): TInterfaceChild;
+var
+  I, K: Integer;
+  ValidInterfaces, ValidChildren: TIntegerArray;
+  ChildText: String;
+begin
+  ValidInterfaces := R_GetValidInterfaces;
+
+	for I := 0 to High(ValidInterfaces) do
+  begin
+		if(ValidInterfaces[I] = 137)then
+			Continue;
+
+    ValidChildren := R_GetValidChildren(ValidInterfaces[I]);
+
+		for K := 0 to High(ValidChildren) do
+    begin
+			ChildText := R_GetInterfaceText(ValidInterfaces[I], K);
+			if (ChildText = '')then
+				Continue;
+			if (Pos(TopText, ChildText) > 0)then
+      begin
+				Result := R_GetInterfaceChild(ValidInterfaces[I], K);
+        Exit;
+      end;
+		end;
+	end;
+end;
+
+(*
+R_GetChatChoices
+~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    function R_GetChatChoices(TopText: String): array of TInterfaceChild;
+
+Returns the interfaces that .
+
+.. note::
+
+  by mormonman
+
+*)
+function R_GetChatChoices(TopText: String): array of TInterfaceChild;
+var
+  Cont: TInterfaceChild;
+  Children: TIntegerArray;
+  Index, I, C: Integer;
+  IsName: Boolean;
+  Text: String;
+begin
+  Cont := R_GetChatOption(TopText);
+  if(Cont.ID <= 0)then
+    Exit;
+
+  Index := Cont.ParentID shr 16;
+  Children := R_GetValidChildren(Index);
+  SetLength(Result, Length(Children));
+  C := 0;
+
+  if(Length(Children) < 1)then
+    Exit;
+
+  for I := 0 to High(Children) do
+  begin
+    Text := R_GetInterfaceText(Index, I);
+    if(Text <> '') and (Length(Text) > 0)then
+    begin
+      if (Pos(TopText, Text) > 0) then
+        Continue;
+      Result[C] := R_GetInterfaceChild(Index, I);
+      Inc(C);
+    end;
+  end;
+  SetLength(Result, C);
+end;
+
+(*
+R_ChooseChatOption
+~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: pascal
+
+    procedure R_ChooseChatOption(TopText, Choice: String);
+
+Clicks the option by TopText and Choice.
+  @TopText - text in red at top of box
+  @Choice - text you want to click
+
+.. note::
+
+  by mormonman
+
+*)
+procedure R_ChooseChatOption(TopText, Choice: String);
+var
+  i: Integer;
+  IFArr: array of TInterfaceChild;
+begin
+  IFArr := R_GetChatChoices(TopText);
+  if Length(IFArr) < 1 then Exit;
+
+  for i := 0 to High(IFArr) do
+    if (Pos(Choice, IFArr[i].Text) > 0) then
+    begin
+      R_ClickInterface(IFArr[i], mouse_Left);
+      Exit;
+    end;
+end;
