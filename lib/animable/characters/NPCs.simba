@@ -244,6 +244,7 @@ begin
       WalkQueueX := SmartGetFieldArrayInt(TheNPC, hook_character_WalkQueueX, 0);
       WalkQueueY := SmartGetFieldArrayInt(TheNPC, hook_character_WalkQueueY, 0);
       Orientation := Round(FixD(180 + (SmartGetFieldInt(TheNPC, hook_character_Orientation)* 45) / 2048));
+      Interacting := Test;
     end;
     Inc(C);
   finally
