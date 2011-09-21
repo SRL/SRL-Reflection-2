@@ -74,7 +74,7 @@ var
   MyPlayer: Integer;
 begin
   MyPlayer := SmartGetFieldObject(0, hook_static_MyPlayer);
-  Result := (SmartGetFieldInt(MyPlayer, hook_character_Animation) = -1) and
+  Result := (SmartGetFieldArrayInt(MyPlayer, hook_character_AnimationQueue, 1) = -1) and
             (SmartGetFieldInt(MyPlayer, hook_character_Motion) = 0);
   SmartFreeObject(MyPlayer);
 end;
@@ -269,7 +269,7 @@ begin
                 (SmartGetFieldInt(Player, hook_animable_PixelY) / 512);
 
       Height := IAbs(SmartGetFieldInt(Player, hook_character_Height));
-      Animation := SmartGetFieldInt(Player, hook_character_Animation);
+      Animation := SmartGetFieldArrayInt(Player, hook_character_AnimationQueue, 1);
       Motion := SmartGetFieldInt(Player, hook_character_Motion);
       HPRatio := SmartGetFieldInt(Player, hook_character_HPRatio) * 100 / $FF;
       InCombat := SmartGetFieldInt(0, hook_static_LoopCycle) < SmartGetFieldInt(Player, hook_character_LoopCycleStatus);
