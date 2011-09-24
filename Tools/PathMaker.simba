@@ -9,9 +9,9 @@
   errors!
 }
 program PathMaker;
-{$DEFINE SMART}
-{$i srl\srl.scar}
 {$i Reflection\Reflection.simba}
+{$Define SMART}
+{$i srl\srl\misc\paintsmart.scar}
 
 const
 

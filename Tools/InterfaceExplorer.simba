@@ -9,10 +9,9 @@ and things of that sort.
 
 *)
 program InterfaceExplorer;
-{$DEFINE SMART}
-{$i srl\srl.scar}
-{$i srl\srl\misc\paintsmart.scar}
 {$i Reflection\Reflection.simba}
+{$Define SMART}
+{$i srl\srl\misc\paintsmart.scar}
 
 const
 
@@ -177,6 +176,7 @@ var
   ToAdd: String;
 begin
   SmartSetupEx(WORLD, MEMBERS, SIGNED, SUPERDETAIL);
+  SmartSetDebug(True);
   case Sender of
     RefreshButton: RefreshList;
     InterfaceList: DoAction;
