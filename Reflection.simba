@@ -62,7 +62,7 @@ var
 begin
   ClientUp := InitializeHTTPClient(False, False);
   SetHTTPUserAgent(ClientUp,'Simba Reflection/' + ToStr(ClientVersion) + '.' + ToStr(HookRev));
-  Src := GetHTTPPage(ClientUp,'http://pyroryan.googlecode.com/svn/trunk/SRL/Hooks.txt');
+  Src := GetHTTPPage(ClientUp,'http://reflection.harry.lu/Hooks.simba');
   FreeHTTPClient(ClientUp);
 
   S := Src;
