@@ -724,7 +724,7 @@ end;
 
 function GetFunctionCount(): Integer; stdcall; export;
 begin
-  Result := 86;
+  Result := 85;
 end;
 
 function GetFunctionCallingConv(X : Integer) : Integer; stdcall; export;
@@ -1011,11 +1011,6 @@ begin
         StrPCopy(ProcDef, 'function SmartIsNull(Obj: Integer): Boolean;');
       end;
     84:
-      begin
-        ProcAddr := @SetDebug;
-        StrPCopy(ProcDef, 'procedure SmartSetDebug(Debug: Boolean);');
-      end;
-    85:
       begin
         ProcAddr := @SetDebug;
         StrPCopy(ProcDef, 'procedure SmartSetDebug(Debug: Boolean);');
