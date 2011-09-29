@@ -23,7 +23,7 @@ Returns a string array of all of the options in a non-tabbed menu.
 *)
 function R_GetMenuItems: TStringArray;
 var
-  Count, I: Integer;
+  Count, I, a, o: Integer;
   NodeList, MenuItemNode, Last, Tail: Integer;
   Option, Action, Item: String;
   Temp, ItemList: TStringArray;
@@ -38,16 +38,16 @@ begin
 
     while(MenuItemNode <> 0)do
     begin
-      Action := SmartGetFieldString(MenuItemNode, hook_menu_Action);
-      Option := SmartGetFieldString(MenuItemNode, hook_menu_Option);
+      Action := R_TrimHTML(SmartGetFieldString(MenuItemNode, hook_menu_Action));
+      Option := R_TrimHTML(SmartGetFieldString(MenuItemNode, hook_menu_Option));
 
       if (Action = '') and (Option = '') then
-        Continue;
+        Break;
 
       Item := Action + ' ' + Option;
 
       SetLength(ItemList, Length(ItemList)+1);
-      ItemList[High(ItemList)] := R_TrimHTML(Item);
+      ItemList[High(ItemList)] := Item;
 
       Last := MenuItemNode;
       MenuItemNode := SmartGetFieldObject(Last, hook_node_Next);
@@ -115,14 +115,14 @@ begin
 
       while (MenuItemNode <> 0) do
       begin
+        Action := R_TrimHTML(SmartGetFieldString(MenuItemNode, hook_menu_Action));
+        Option := R_TrimHTML(SmartGetFieldString(MenuItemNode, hook_menu_Option));
 
-        Action := SmartGetFieldString(menuItemNode, hook_menu_Action);
-        Option := SmartGetFieldString(menuItemNode, hook_menu_Option);
-
-        if (Action = '') and (Option = '') then
-          Continue;
+        if (Action = '') and (Option  = '') then
+          Break;
 
         Item := Action + ' ' + Option;
+
         SetLength(Items, Length(Items)+1);
         Items[High(Items)] := Trim(R_TrimHTML(Lowercase(Item)));
 

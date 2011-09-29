@@ -434,6 +434,7 @@ begin
   SetLength(Result, 512);
   SetLength(Result, StringFromString(JStr, Result));
   Result := StringReplace(Result, 'Â', '', [rfReplaceAll]);
+  Result := StringReplace(Result, #194, '', [rfReplaceAll]);
   Result := StringReplace(Result, #160, #32, [rfReplaceAll]);
   std_freeObject(JStr);
 end;
@@ -741,7 +742,7 @@ begin
     0:
       begin
         ProcAddr := @SmartSetup;
-        StrPCopy(ProcDef, 'procedure SmartSetup(Root, Params: String; Width, Height: Integer; InitSeq: String);');
+        StrPCopy(ProcDef, 'procedure R_SmartSetup(Root, Params: String; Width, Height: Integer; InitSeq: String);');
       end;
     1..28: libs_GetFunctionInfo(X, ProcAddr, ProcDef);
     29: libs_GetFunctionInfo(32, ProcAddr, ProcDef);

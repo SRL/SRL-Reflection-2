@@ -79,8 +79,8 @@ function FindWindowBySize(Width, Height: Integer): Boolean;
 begin
   result:= true;
 end;
-
-procedure SmartSetupEx(Server: Integer; Members, Signed, SuperDetail: Boolean);
+{$ENDIF}
+procedure R_SmartSetupEx(Server: Integer; Members, Signed, SuperDetail: Boolean);
 var
   Prefix: string;
 begin
@@ -90,6 +90,6 @@ begin
     Writeln('Invalid world number or corrupted world list. Please review your settings');
     TerminateScript;
   end;
-  SmartSetup('http://'+Prefix+'.runescape.com/', 'plugin.js?param=o0,a' + IntToStr((Integer(not(Signed)) + 1) * Integer(not((SuperDetail and Signed)))) + ',m' + IntToStr(Integer(Members)), 765, 503, 's');
+  R_SmartSetup('http://'+Prefix+'.runescape.com/', 'plugin.js?param=o0,a' + IntToStr((Integer(not(Signed)) + 1) * Integer(not((SuperDetail and Signed)))) + ',m' + IntToStr(Integer(Members)), 765, 503, 's');
 end;
-{$ENDIF}
+
