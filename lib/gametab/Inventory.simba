@@ -53,8 +53,8 @@ NULL_INVITEM;
 *)
 function R_GetInvItemAt(Slot: Integer): TInvItem;
 var
-  Item, NameBytes, Actions, ID: integer;
-  InterfaceID, ArrayLength, Count, Action, I: Integer;
+  Item, Actions, ID: integer;
+  InterfaceID, ArrayLength, Count, I: Integer;
   Temp: String;
 begin
   Result := NULL_INVITEM;
@@ -77,9 +77,7 @@ begin
       Result.ID := ID;
       Result.StackSize := SmartGetFieldInt(Item, hook_interface_ComponentStackSize);
       Result.Slot := Slot;
-
-      NameBytes := SmartGetFieldObject(Item, hook_interface_ComponentName);
-      Result.Name := R_TrimHTML(R_GetJavaString(NameBytes, 512));
+      Result.Name := R_TrimHTML(SmartGetFieldString(Item, hook_interface_ComponentName));
 
       try
         Actions := SmartGetFieldObject(Item, hook_interface_Actions);
@@ -89,16 +87,11 @@ begin
 
         for i := 0 to ArrayLength-1 do
         begin
-          try
-            Action := SmartGetFieldArrayObject(Item, hook_interface_Actions, I);
-            Temp := R_GetJavaString(Action, 512);
-            if(Trim(Temp) <> NULL_STRING)then
-            begin
-              Result.Actions[Count] := R_TrimHTML(Temp);
-              Inc(Count);
-            end;
-          finally
-            SmartFreeObject(Action);
+          Temp := SmartGetFieldArrayString(Item, hook_interface_Actions, I);
+          if(Trim(Temp) <> NULL_STRING)then
+          begin
+            Result.Actions[Count] := R_TrimHTML(Temp);
+            Inc(Count);
           end;
         end;
         SetLength(Result.Actions, Count);
@@ -108,7 +101,6 @@ begin
     end;
   finally
     SmartFreeObject(Item);
-    SmartFreeObject(NameBytes);
     SmartFreeObject(Actions);
   end;
 end;

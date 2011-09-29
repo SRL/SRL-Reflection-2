@@ -77,19 +77,19 @@ npcs, not for scripts.
 *)
 function R_GetNPCActionArray(NPCDef: integer): TStringArray;
 var
-  i, c, bytes: integer;
+  i, c: integer;
+  temp: String;
 begin
   SetLength(Result, 11);
   c := 0;
   for i := 0 to 10 do
   begin
-    bytes := SmartGetFieldArrayObject(NPCDef, hook_npcdef_Actions, i);
-    if(bytes > 0)then
+    temp := SmartGetFieldArrayString(NPCDef, hook_npcdef_Actions, i);
+    if(temp <> '')then
     begin
-      Result[c] := R_GetJavaString(bytes, 512);
+      Result[c] := temp;
       inc(c);
     end;
-    SmartFreeObject(bytes);
   end;
   SetLength(Result, c);
 end;
@@ -113,7 +113,7 @@ then it will include Null NPCs.
 function R_GetAllNPCs(Null: Boolean): TNPCArray;
 var
   I, C, H, NumNPCs, BaseX, BaseY, LoopCycle: Integer;
-  TheNPC, TheNPCNode, NPCDef, TheBytes: integer;
+  TheNPC, TheNPCNode, NPCDef: integer;
   TheName: String;
 begin
   NumNPCs := SmartGetFieldInt(0,hook_static_NPCCount);
@@ -131,8 +131,7 @@ begin
     TheNPCNode := SmartGetFieldArrayObject(0, hook_static_NPCNodes, I);
     TheNPC := SmartGetFieldObject(TheNPCNode, hook_npcnode_NPC);
     NPCDef := SmartGetFieldObject(TheNPC, hook_npc_NPCDef);
-    TheBytes := SmartGetFieldObject(NPCDef, hook_npcdef_Name);
-    TheName := Lowercase(Trim(R_GetJavaString(TheBytes, 512)));
+    TheName := Lowercase(Trim(SmartGetFieldString(NPCDef, hook_npcdef_Name)));
 
     if((not Null) and (TheName = 'null'))then
       continue;
@@ -168,7 +167,6 @@ begin
     SmartFreeObject(TheNPCNode);
     SmartFreeObject(TheNPC);
     SmartFreeObject(NPCDef);
-    SmartFreeObject(TheBytes);
   end;
   SetLength(Result, C);
 end;
@@ -192,7 +190,7 @@ then it will include Null NPCs. Made for interacting functions.
 function R_GetBusyNPCs(Null: Boolean): TNPCArray;
 var
   I, C, H, NumNPCs, BaseX, BaseY, LoopCycle: Integer;
-  TheNPC, TheNPCNode, NPCDef, TheBytes, Test: integer;
+  TheNPC, TheNPCNode, NPCDef, Test: integer;
   TheName: String;
 begin
   NumNPCs := SmartGetFieldInt(0,hook_static_NPCCount);
@@ -210,8 +208,7 @@ begin
     TheNPCNode := SmartGetFieldArrayObject(0, hook_static_NPCNodes, I);
     TheNPC := SmartGetFieldObject(TheNPCNode, hook_npcnode_NPC);
     NPCDef := SmartGetFieldObject(TheNPC, hook_npc_NPCDef);
-    TheBytes := SmartGetFieldObject(NPCDef, hook_npcdef_Name);
-    TheName := Lowercase(Trim(R_GetJavaString(TheBytes, 512)));
+    TheName := Lowercase(Trim(SmartGetFieldString(NPCDef, hook_npcdef_Name)));
 
     if((not Null) and (TheName = 'null'))then
       continue;
@@ -251,7 +248,6 @@ begin
     SmartFreeObject(TheNPCNode);
     SmartFreeObject(TheNPC);
     SmartFreeObject(NPCDef);
-    SmartFreeObject(TheBytes);
   end;
   SetLength(Result, C);
 end;
@@ -276,7 +272,7 @@ whether to include "null" npc's or not.
 function R_GetNPCsMulti(TheVarArr: TVariantArray; Null: Boolean): TNPCArray;
 var
   NumNPCs, BaseX, BaseY, LoopCycle, H, C, I, K, H2: Integer;
-  TheNPCNode, TheNPC, NPCDef, TheBytes, vType, TempID: Integer;
+  TheNPCNode, TheNPC, NPCDef, vType, TempID: Integer;
   TheName: String;
   NPCs: TNPCArray;
   B: Boolean;
@@ -297,8 +293,7 @@ begin
     TheNPCNode := SmartGetFieldArrayObject(0, hook_static_NPCNodes, I);
     TheNPC := SmartGetFieldObject(TheNPCNode, hook_npcnode_NPC);
     NPCDef := SmartGetFieldObject(TheNPC, hook_npc_NPCDef);
-    TheBytes := SmartGetFieldObject(NPCDef, hook_npcdef_Name);
-    TheName := Lowercase(Trim(R_GetJavaString(TheBytes, 512)));
+    TheName := Lowercase(Trim(SmartGetFieldString(NPCDef, hook_npcdef_Name)));
 
     if((not Null) and (TheName = 'null'))then
       continue;
@@ -354,7 +349,6 @@ begin
     SmartFreeObject(TheNPCNode);
     SmartFreeObject(TheNPC);
     SmartFreeObject(NPCDef);
-    SmartFreeObject(TheBytes);
   end;
   SetLength(NPCs, C);
   Result := R_SortNPCs(NPCs);
@@ -451,7 +445,7 @@ whether or not to include null npcs in your search.
 function R_GetNPCsAt(TheTile: TTile; Null: Boolean): TNPCArray;
 var
   I, C, H, NumNPCs, BaseX, BaseY, LoopCycle: Integer;
-  TheNPC, TheNPCNode, NPCDef, TheBytes: integer;
+  TheNPC, TheNPCNode, NPCDef: integer;
   TheName: String;
   TempTile: TTile;
 begin
@@ -470,8 +464,7 @@ begin
     TheNPCNode := SmartGetFieldArrayObject(0, hook_static_NPCNodes, I);
     TheNPC := SmartGetFieldObject(TheNPCNode, hook_npcnode_NPC);
     NPCDef := SmartGetFieldObject(TheNPC, hook_npc_NPCDef);
-    TheBytes := SmartGetFieldObject(NPCDef, hook_npcdef_Name);
-    TheName := Lowercase(Trim(R_GetJavaString(TheBytes, 512)));
+    TheName := Lowercase(Trim(SmartGetFieldString(NPCDef, hook_npcdef_Name)));
 
     if((not Null) and (TheName = 'null'))then
       continue;
@@ -512,7 +505,6 @@ begin
     SmartFreeObject(TheNPCNode);
     SmartFreeObject(TheNPC);
     SmartFreeObject(NPCDef);
-    SmartFreeObject(TheBytes);
   end;
   SetLength(Result, C);
 end;
@@ -700,7 +692,8 @@ you, it returns NULL_NPC.
 *)
 function R_GetInteractingNPC(Null: Boolean): TNPC;
 var
-  MyPlayer, InteractingPlayer: TPlayer;
+  MyPlayer: TPlayer;
+  PName: String;
   NPCs: TNPCArray;
   I, H, PlayerIndex: Integer;
 begin
@@ -714,8 +707,8 @@ begin
     PlayerIndex := NPCs[I].Interacting - 32768;
     if(PlayerIndex < 0)then
       Continue;
-    InteractingPlayer := R_GetPlayer(PlayerIndex);
-    if(InteractingPlayer.Name = MyPlayer.Name)then
+    PName := R_GetPlayerName(PlayerIndex);
+    if(PName = MyPlayer.Name)then
     begin
       Result := NPCs[I];
       Exit;
@@ -747,6 +740,7 @@ var
   PName: String;
 begin
   MyPlayer := R_GetMe;
+  writeln(myplayer.name);
   NPCs := R_GetBusyNPCs(Null);
   H := High(NPCs);
   if (H < 0) then
@@ -757,9 +751,11 @@ begin
   for I := 0 to H do
   begin
     PlayerIndex := NPCs[I].Interacting - 32768;
+    writeln(playerindex);
     if(PlayerIndex < 0)then
       Continue;
     PName := R_GetPlayerName(PlayerIndex);
+    writeln(pname);
     if(PName = MyPlayer.Name)then
     begin
       Result[C] := NPCs[I];

@@ -23,9 +23,9 @@ Returns a string array of all of the options in a non-tabbed menu.
 *)
 function R_GetMenuItems: TStringArray;
 var
-  Option, Action, Count, I: Integer;
+  Count, I: Integer;
   NodeList, MenuItemNode, Last, Tail: Integer;
-  Item: String;
+  Option, Action, Item: String;
   Temp, ItemList: TStringArray;
 begin
   try
@@ -38,21 +38,14 @@ begin
 
     while(MenuItemNode <> 0)do
     begin
-      Action := SmartGetFieldObject(MenuItemNode, hook_menu_Action);
-      Option := SmartGetFieldObject(MenuItemNode, hook_menu_Option);
+      Action := SmartGetFieldString(MenuItemNode, hook_menu_Action);
+      Option := SmartGetFieldString(MenuItemNode, hook_menu_Option);
 
-      if(Action = 0) or (Option = 0)then
-      begin
-        SmartFreeObject(Action);
-        SmartFreeObject(Option);
-        break;
-      end;
+      if (Action = '') and (Option = '') then
+        Continue;
 
-      Item := Trim(R_GetJavaString(Action, 256) + ' ' +
-                   R_GetJavaString(Option, 256));
+      Item := Action + ' ' + Option;
 
-      SmartFreeObject(Action);
-      SmartFreeObject(Option);
       SetLength(ItemList, Length(ItemList)+1);
       ItemList[High(ItemList)] := R_TrimHTML(Item);
 
@@ -97,10 +90,9 @@ Returns a  2-dimensional string array of all of the options in a tabbed menu.
 *)
 function R_GetMenuItemsTabbed: array of TStringArray;
 var
-  Action, Option: Integer;
   NodeSubList, GroupNode, Tail: Integer;
   SubMenu, MenuItemNode, Last, Last2: Integer;
-  Item: String;
+  Action, Option, Item: String;
   Items: TStringArray;
 begin
   try
@@ -124,20 +116,13 @@ begin
       while (MenuItemNode <> 0) do
       begin
 
-        Action := SmartGetFieldObject(menuItemNode, hook_menu_Action);
-        Option := SmartGetFieldObject(menuItemNode, hook_menu_Option);
+        Action := SmartGetFieldString(menuItemNode, hook_menu_Action);
+        Option := SmartGetFieldString(menuItemNode, hook_menu_Option);
 
-        if(Action = 0) and (Option = 0)then
-        begin
-          SmartFreeObject(Action);
-          SmartFreeObject(Option);
-          break;
-        end;
+        if (Action = '') and (Option = '') then
+          Continue;
 
-        Item := Trim(R_GetJavaString(Action, 512) + ' ' +
-                     R_GetJavaString(Option, 512));
-        SmartFreeObject(Action);
-        SmartFreeObject(Option);
+        Item := Action + ' ' + Option;
         SetLength(Items, Length(Items)+1);
         Items[High(Items)] := Trim(R_TrimHTML(Lowercase(Item)));
 

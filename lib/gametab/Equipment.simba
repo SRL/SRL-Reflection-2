@@ -37,7 +37,7 @@ constants at top of page.)
 *)
 function R_GetEquippedItemAt(Slot: Integer): TEquipmentItem;
 var
-  Child, ID, NameBytes: Integer;
+  Child, ID: Integer;
 begin
   Result := NULL_EQUIPMENT;
 
@@ -53,14 +53,7 @@ begin
     if (ID > 0) then
     begin
       Result.ID := ID;
-
-      try
-        NameBytes := SmartGetFieldObject(Child, hook_interface_ComponentName);
-        Result.Name := R_TrimHTML(R_GetJavaString(NameBytes, 512));
-      finally
-        SmartFreeObject(NameBytes);
-      end;
-
+      Result.Name := R_TrimHTML(SmartGetFieldString(Child, hook_interface_ComponentName));
       Result.Count := SmartGetFieldInt(Child, hook_interface_ComponentStackSize);
       Result.Actions := R_GetInterfaceActions(Child);
       Result.IsAmmo := (Result.Count > 1);

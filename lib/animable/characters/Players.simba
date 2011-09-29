@@ -54,7 +54,7 @@ Returns all of the players in the loaded area.
 *)
 function R_GetAllPlayers: TPlayerArray;
 var
-  I, H, NumPlayers, IndexPos, Player, NameBytes, LoopCycle: integer;
+  I, H, NumPlayers, IndexPos, Player, LoopCycle: integer;
   BaseX, BaseY: Integer;
 begin
   NumPlayers := SmartGetFieldInt(0, hook_static_PlayerCount);
@@ -76,11 +76,7 @@ begin
     with Result[I] do
     begin
       Index := IndexPos;
-
-      NameBytes := SmartGetFieldObject(Player, hook_player_Name);
-      Name := R_GetJavaString(NameBytes, 512);
-      SmartFreeObject(NameBytes);
-
+      Name := SmartGetFieldString(Player, hook_player_Name);
       Level := SmartGetFieldInt(Player, hook_player_Level);
       Team := SmartGetFieldInt(Player, hook_player_Team);
       Tile.X := BaseX + (SmartGetFieldInt(Player, hook_animable_PixelX) / 512);
@@ -119,7 +115,7 @@ specified variants (names or indices).
 function R_GetPlayersMulti(TheVarArr: TVariantArray): TPlayerArray;
 var
   NumPlayers, BaseX, BaseY, LoopCycle, H, C, I, K, H2: Integer;
-  Player, NameBytes, vType, IndexPos: Integer;
+  Player, vType, IndexPos: Integer;
   TheName: String;
   PlayerArray: TPlayerArray;
   B: Boolean;
@@ -140,9 +136,7 @@ begin
   try
     IndexPos := SmartGetFieldArrayInt(0, hook_static_PlayerIndexArray, I);
     Player := SmartGetFieldArrayObject(0, hook_static_Players, IndexPos);
-
-    NameBytes := SmartGetFieldObject(Player, hook_player_Name);
-    TheName := R_GetJavaString(NameBytes, 512);
+    TheName := SmartGetFieldString(Player, hook_player_Name);
 
     H2 := High(TheVarArr);
     B := False;
@@ -183,7 +177,6 @@ begin
     Inc(C);
   finally
     SmartFreeObject(Player);
-    SmartFreeObject(NameBytes);
   end;
 
   SetArrayLength(PlayerArray, C);
@@ -278,7 +271,7 @@ functions.
 function R_GetPlayerName(Index: Integer): String;
 var
   NumPlayers, H, I,
-  IndexPos, Player, NameBytes: Integer;
+  IndexPos, Player: Integer;
 begin
   NumPlayers := SmartGetFieldInt(0,hook_static_PlayerCount);
   if (NumPlayers < 1) then
@@ -292,13 +285,11 @@ begin
     begin
       Player := SmartGetFieldArrayObject(0, hook_static_Players, IndexPos);
 
-      NameBytes := SmartGetFieldObject(Player, hook_player_Name);
-      Result := R_GetJavaString(NameBytes, 512);
+      Result := SmartGetFieldString(Player, hook_player_Name);
       Exit;
     end;
   finally
     SmartFreeObject(Player);
-    SmartFreeObject(NameBytes);
   end;
 end;
 
@@ -321,7 +312,7 @@ levels specified. Sorts the list from closest to you.
 function R_GetPlayersByLevelEx(Levels: TIntegerArray): TPlayerArray;
 var
   NumPlayers, BaseX, BaseY, LoopCycle, H, C, I: Integer;
-  Player, NameBytes, IndexPos, TempLevel: Integer;
+  Player, IndexPos, TempLevel: Integer;
   PlayerArray: TPlayerArray;
 begin
   NumPlayers := SmartGetFieldInt(0,hook_static_PlayerCount);
@@ -350,9 +341,7 @@ begin
     begin
       Index := IndexPos;
 
-      NameBytes := SmartGetFieldObject(Player, hook_player_Name);
-      Name := R_GetJavaString(NameBytes, 512);
-
+      Name := SmartGetFieldString(Player, hook_player_Name);
       Level := TempLevel;
       Team := SmartGetFieldInt(Player, hook_player_Team);
       Tile.X := BaseX + (SmartGetFieldInt(Player, hook_animable_PixelX) / 512);
@@ -370,7 +359,6 @@ begin
     Inc(C);
   finally
     SmartFreeObject(Player);
-    SmartFreeObject(NameBytes);
   end;
 
   SetArrayLength(PlayerArray, C);

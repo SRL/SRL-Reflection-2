@@ -545,7 +545,7 @@ Returns an array of all of the Bank Items in the bank.
 *)
 function R_GetAllBankItems: TBankItemArray;
 var
-  C, BankSlot, Bank, Item, TheID, NameObj: Integer;
+  C, BankSlot, Bank, Item, TheID: Integer;
 begin
   SetLength(Result, 0);
   if not R_BankScreen then
@@ -565,13 +565,7 @@ begin
           ID := TheID;
           StackSize := SmartGetFieldInt(Item, hook_interface_ComponentStackSize);
           Slot := BankSlot;
-
-          try
-            NameObj := SmartGetFieldObject(Item, hook_interface_ComponentName);
-            Name := R_TrimHTML(R_GetJavaString(NameObj, 512));
-          finally
-            SmartFreeObject(NameObj);
-          end;
+          Name := R_TrimHTML(SmartGetFieldString(Item, hook_interface_ComponentName));
         end;
         Inc(C);
       end;
@@ -1184,12 +1178,12 @@ begin
   SortTPAFrom(Tiles, R_GetMyPos);
   Tile := Tiles[0];
 
-  //Writeln('Starting');
+  Writeln('Starting');
 
   //Get to bank booth.
   if(R_DistanceFromTile(Tile) > 3) and (not R_TileOnMS(Tile, 10))then
   begin
-    //Writeln('RAWR');
+    Writeln('RAWR');
     if not(R_TileOnMM(Tile)) then
     begin
       R_Debug('Could not find Bank Booth.', 'R_OpenBankBooth');

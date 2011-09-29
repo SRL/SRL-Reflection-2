@@ -345,8 +345,8 @@ Example: Withdrawing bank items, etc.
 *)
 function R_GetInterfaceActions(Obj: Integer): TStringArray;
 var
-  NumActions, I, Action, C: Integer;
-  Temp: String;
+  NumActions, I, C: Integer;
+  Action: String;
 begin
   NumActions := SmartGetFieldArraySize(Obj, Hook_Interface_Actions, 1);
   if (NumActions <= 0)then
@@ -357,19 +357,11 @@ begin
 
   for I := 0 to NumActions-1 do
   begin
-    try
-      Action := SmartGetFieldArrayObject(Obj, hook_interface_Actions, I);
-      if(Action = 0)then
-        continue;
-      Temp := R_TrimHTML(R_GetJavaString(Action, 512));
-      if(Temp <> '')then
-      begin
-        Result[C] := Temp;
-        Inc(C);
-      end;
-    finally
-      SmartFreeObject(Action);
-    end;
+    Action := SmartGetFieldArrayString(Obj, hook_interface_Actions, I);
+    if(Action = '')then
+      continue;
+    Result[C] := Action;
+    Inc(C);
   end;
   SetLength(Result, c);
 end;
@@ -424,7 +416,7 @@ Gets all Interface -> Child information and stores in a TInterfaceChild.
 *)
 function R_GetInterfaceChild(ParentI, ChildI: Integer): TInterfaceChild;
 var
-  Child, TextObj, NameObj: Integer;
+  Child: Integer;
   P: TPoint;
   H: Boolean;
 begin
@@ -450,23 +442,9 @@ begin
       RelativeY := SmartGetFieldInt(Child, hook_interface_Y);
       Width := SmartGetFieldInt(Child, hook_interface_Width);
       Height := SmartGetFieldInt(Child, hook_interface_Height);
-
-      try
-        TextObj := SmartGetFieldObject(Child, hook_interface_Text);
-        Text := R_TrimHTML(R_GetJavaString(TextObj, 512));
-      finally
-        SmartFreeObject(TextObj);
-      end;
-
+      Text := SmartGetFieldString(Child, hook_interface_Text);
       TextColor := SmartGetFieldInt(Child, hook_interface_TextColor);
-
-      try
-        NameObj := SmartGetFieldObject(Child, hook_interface_ComponentName);
-        Name := R_TrimHTML(R_GetJavaString(NameObj, 512));
-      finally
-        SmartFreeObject(NameObj);
-      end;
-
+      Name := SmartGetFieldString(Child, hook_interface_ComponentName);
       IsHidden := H;
       VScrollSize := SmartGetFieldInt(Child, hook_interface_VerticalScrollBarSize);
       VScrollPosition := SmartGetFieldInt(Child, hook_interface_VerticalScrollBarPosition);
@@ -502,7 +480,7 @@ TInterfaceComponent.
 *)
 function R_GetInterfaceComponent(ParentI, ChildI, ComponentI: Integer): TInterfaceComponent;
 var
-  Component, TextObj: Integer;
+  Component: Integer;
   P: TPoint;
   H: Boolean;
 begin
@@ -528,23 +506,9 @@ begin
       RelativeY := SmartGetFieldInt(Component, hook_interface_Y);
       Width := SmartGetFieldInt(Component, hook_interface_Width);
       Height := SmartGetFieldInt(Component, hook_interface_Height);
-
-      try
-        TextObj := SmartGetFieldObject(Component, hook_interface_Text);
-        Text := R_TrimHTML(R_GetJavaString(TextObj, 512));
-      finally
-        SmartFreeObject(TextObj);
-      end;
-
+      Text := SmartGetFieldString(Component, hook_interface_Text);
       TextColor := SmartGetFieldInt(Component, hook_interface_TextColor);
-
-      try
-        TextObj := SmartGetFieldObject(Component, hook_interface_ComponentName);
-        Name := R_TrimHTML(R_GetJavaString(TextObj, 512));
-      finally
-        SmartFreeObject(TextObj);
-      end;
-
+      Name := SmartGetFieldString(Component, hook_interface_ComponentName);
       IsHidden := H;
       VScrollSize := SmartGetFieldInt(Component, hook_interface_VerticalScrollBarSize);
       VScrollPosition := SmartGetFieldInt(Component, hook_interface_VerticalScrollBarPosition);
@@ -610,17 +574,15 @@ Set CompI to -1 to only use ChildI.
 *)
 function R_GetInterfaceTextEx(ParentI, ChildI, CompI: Integer): String;
 var
-  Text, Child: Integer;
+  Child: Integer;
 begin
   if (CompI < 0) then
     Child := R_GetInterfaceChildRef(ParentI, ChildI)
       else Child := R_GetInterfaceComponentRef(ParentI, ChildI, CompI);
   if (Child > 0) then
   try
-    Text := SmartGetFieldObject(Child, hook_interface_Text);
-    Result := R_GetJavaString(Text, 512);
+    Result := SmartGetFieldString(Child, hook_interface_Text);
   finally
-    SmartFreeObject(Text);
     SmartFreeObject(Child);
   end;
 end;

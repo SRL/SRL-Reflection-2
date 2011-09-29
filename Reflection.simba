@@ -5,8 +5,7 @@
 {$DEFINE REFLECTION}
 
 {$i ./lib/core/Hooks.simba}
-{$i ./lib/core/Smart.simba}
-{$i srl\srl.scar}
+{$i ./lib/core/RefSmart.simba}
 {$i ./lib/core/Constants.simba}
 {$i ./lib/core/Core.simba}
 {$i ./lib/core/Tiles.simba}
@@ -62,7 +61,7 @@ var
 begin
   ClientUp := InitializeHTTPClient(False, False);
   SetHTTPUserAgent(ClientUp,'Simba Reflection/' + ToStr(ClientVersion) + '.' + ToStr(HookRev));
-  Src := GetHTTPPage(ClientUp,'http://reflection.harry.lu/Hooks.simba');
+  Src := GetHTTPPage(ClientUp,'http://pyroryan.googlecode.com/svn/trunk/SRL/Hooks.txt');
   FreeHTTPClient(ClientUp);
 
   S := Src;

@@ -250,15 +250,13 @@ Returns a TPlayer of your player.
 *)
 function R_GetMe: TPlayer;
 var
-  Player, NameBytes: Integer;
+  Player: Integer;
 begin
   try
     Player := SmartGetFieldObject(0, hook_static_MyPlayer);
     with Result do
     begin
-      NameBytes := SmartGetFieldObject(Player, hook_player_Name);
-      Name := R_GetJavaString(NameBytes, 512);
-      SmartFreeObject(NameBytes);
+      Name := SmartGetFieldString(Player, hook_player_Name);
 
       Level := SmartGetFieldInt(Player, hook_player_Level);
       Team := SmartGetFieldInt(Player, hook_player_Team);
