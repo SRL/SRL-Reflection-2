@@ -23,7 +23,7 @@ Returns a string array of all of the options in a non-tabbed menu.
 *)
 function R_GetMenuItems: TStringArray;
 var
-  Count, I, a, o: Integer;
+  Count, I: Integer;
   NodeList, MenuItemNode, Last, Tail: Integer;
   Option, Action, Item: String;
   Temp, ItemList: TStringArray;
