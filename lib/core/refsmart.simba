@@ -84,7 +84,7 @@ procedure R_SmartSetupEx(Server: Integer; Members, Signed, SuperDetail: Boolean)
 var
   Prefix: string;
 begin
-  Prefix := ReadINI('World' + IntToStr(Server), 'Prefix', IncludePath + 'Reflection-2.2/Modules/Core/worlds.ini');
+  Prefix := ReadINI('World' + IntToStr(Server), 'Prefix', IncludePath + 'SRL/SRL/misc/worlds.ini');
   if(Prefix = '')then
   begin
     Writeln('Invalid world number or corrupted world list. Please review your settings');
