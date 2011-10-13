@@ -751,11 +751,9 @@ begin
   for I := 0 to H do
   begin
     PlayerIndex := NPCs[I].Interacting - 32768;
-    writeln(playerindex);
     if(PlayerIndex < 0)then
       Continue;
     PName := R_GetPlayerName(PlayerIndex);
-    writeln(pname);
     if(PName = MyPlayer.Name)then
     begin
       Result[C] := NPCs[I];
